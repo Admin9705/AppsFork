@@ -1,13 +1,17 @@
 #!/bin/bash
 
+#!/bin/bash
+
 # ================================ DEFAULT VALUES ================================ #
 
 default_variables() {
-port_number=29999
-time_zone=America/New_York
-appdata_path=/pg/appdata/netdata
-version_tag=latest
-expose=
+    port_number=45000
+    time_zone=America/New_York
+    appdata_path=/pg/appdata/uptimekuma
+    version_tag=1
+    expose=
+    subdomain=uptime  # Subdomain to use for Traefik routing
+    domain=9705.us  # Base domain for Traefik routing
 }
 
 # ================================ CONTAINER DEPLOYMENT ================================ #
@@ -18,28 +22,18 @@ create_docker_compose() {
     cat << EOF > /pg/ymals/${app_name}/docker-compose.yml
 services:
   ${app_name}:
-    image: netdata/netdata:${version_tag}
+    image: louislam/uptime-kuma:${version_tag}
     container_name: ${app_name}
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=${time_zone}
-    volumes:
-      - ${appdata_path}/netdataconfig:/etc/netdata
-      - ${appdata_path}/netdatalib:/var/lib/netdata
-      - ${appdata_path}/netdatacache:/var/cache/netdata
-      - /etc/passwd:/host/etc/passwd:ro
-      - /etc/group:/host/etc/group:ro
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /etc/os-release:/host/etc/os-release:ro
     ports:
-      - ${expose}${port_number}:19999
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - apparmor=unconfined
+      - "${expose}${port_number}:3001"
+    volumes:
+      - ${appdata_path}:/app/data
     restart: unless-stopped
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${app_name}.rule=Host(\`${subdomain}.${domain}\`)"
+      - "traefik.http.routers.${app_name}.entrypoints=web"
+      - "traefik.http.services.${app_name}.loadbalancer.server.port=3001"
     networks:
       - plexguide
 
