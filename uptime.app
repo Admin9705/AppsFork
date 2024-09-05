@@ -32,7 +32,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.${app_name}.rule=Host(\`${subdomain}.${domain}\`)"
-      - "traefik.http.routers.${app_name}.entrypoints=web"
+      - "traefik.http.routers.${app_name}.entrypoints=websecure"
+      - "traefik.http.routers.${app_name}.tls.certresolver=mytlschallenge"
       - "traefik.http.services.${app_name}.loadbalancer.server.port=3001"
     networks:
       - plexguide
