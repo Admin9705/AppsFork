@@ -9,7 +9,7 @@ appdata_path=/pg/appdata/netdata
 version_tag=latest
 expose=
 subdomain=netdata  # Subdomain to use for Traefik routing
-domain=9705.us  # Base domain for Traefik routing
+domain=9705.life  # Base domain for Traefik routing
 }
 
 # ================================ CONTAINER DEPLOYMENT ================================ #
