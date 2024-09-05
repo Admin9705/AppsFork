@@ -9,7 +9,7 @@ default_variables() {
     version_tag=1
     expose=
     subdomain=uptime2  # Subdomain to use for Traefik routing
-    domain=9705.us  # Base domain for Traefik routing
+    domain=9705.life  # Base domain for Traefik routing
 }
 
 # ================================ CONTAINER DEPLOYMENT ================================ #
