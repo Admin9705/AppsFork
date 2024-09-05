@@ -3,11 +3,13 @@
 # ================================ DEFAULT VALUES ================================ #
 
 default_variables() {
-port_number=29999
+port_number=19999
 time_zone=America/New_York
 appdata_path=/pg/appdata/netdata
 version_tag=latest
 expose=
+subdomain=netdata  # Subdomain to use for Traefik routing
+domain=9705.us  # Base domain for Traefik routing
 }
 
 # ================================ CONTAINER DEPLOYMENT ================================ #
